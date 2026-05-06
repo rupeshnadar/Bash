@@ -54,7 +54,8 @@ rm -f /etc/ssh/ssh_host_*
 
 # ---------- Step 7: Clean logs ----------
 echo "[INFO] Cleaning logs..."
-rm -rf /var/log/*
+# rm -rf /var/log/*
+rm -f /var/log/*
 mkdir -p /var/log/{audit,sa}
 touch /var/log/messages /var/log/secure /var/log/audit/audit.log
 
