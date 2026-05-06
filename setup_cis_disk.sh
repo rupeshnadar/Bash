@@ -11,6 +11,60 @@ DISK="/dev/sdb"
 
 echo "[INFO] Starting CIS disk setup on $DISK"
 
+# ---------- OS Detection ----------
+if [ -f /etc/os-release ]; then
+    . /etc/os-release
+    OS=$ID
+else
+    echo "[ERROR] Cannot detect OS"
+    exit 1
+fi
+
+echo "[INFO] Detected OS: $OS"
+
+# ---------- Install Required Packages ----------
+install_packages() {
+   case "$OS" in
+        rhel|centos|rocky|almalinux)
+            echo "[INFO] Installing packages using yum/dnf..."
+            yum install -y parted xfsprogs || dnf install -y parted xfsprogs
+            ;;
+        ubuntu|debian)
+            echo "[INFO] Installing packages using apt..."
+            apt update
+            apt install -y parted xfsprogs
+            ;;
+        arch)
+            echo "[INFO] Installing packages using pacman..."
+            pacman -Sy --noconfirm parted xfsprogs
+            ;;
+        *)
+            echo "[ERROR] Unsupported OS: $OS"
+            exit 1
+            ;;
+    esac
+}
+
+# ---------- Check commands ----------
+check_command() {
+    command -v "$1" &>/dev/null || return 1
+}
+
+if ! check_command parted || ! check_command mkfs.xfs; then
+    install_packages
+fi
+
+# ---------- Disk Safety Check ----------
+if [ ! -b "$DISK" ]; then
+    echo "[ERROR] Disk $DISK not found"
+    lsblk
+    exit 1
+fi
+
+echo "[WARNING] This will ERASE all data on $DISK"
+read -p "Type YES to continue: " CONFIRM
+[ "$CONFIRM" != "YES" ] && exit 1
+
 # ---------- Create partitions ----------
 parted -s $DISK mklabel gpt
 
