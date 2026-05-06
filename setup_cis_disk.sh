@@ -42,9 +42,9 @@ cp /etc/fstab /etc/fstab.bak_$(date +%s)
 
 # ---------- Add to fstab ----------
 echo "${DISK}1 /tmp xfs defaults,nodev,nosuid,noexec 0 0" >> /etc/fstab
-echo "${DISK}3 /var/tmp xfs defaults,nodev,nosuid,noexec 0 0" >> /etc/fstab
-echo "${DISK}4 /var/log xfs defaults,nodev,nosuid,noexec 0 0" >> /etc/fstab
-echo "${DISK}5 /var/log/audit xfs defaults,nodev,nosuid,noexec 0 0" >> /etc/fstab
+echo "${DISK}2 /var/tmp xfs defaults,nodev,nosuid,noexec 0 0" >> /etc/fstab
+echo "${DISK}3 /var/log xfs defaults,nodev,nosuid,noexec 0 0" >> /etc/fstab
+echo "${DISK}4 /var/log/audit xfs defaults,nodev,nosuid,noexec 0 0" >> /etc/fstab
 
 # ---------- Mount all ----------
 mount -a
