@@ -38,7 +38,7 @@ mkfs.xfs ${DISK}4
 mkdir -p /tmp /var/tmp /var/log /var/log/audit
 
 # ---------- Backup fstab ----------
-cp /etc/fstab /etc/fstab.bak
+cp /etc/fstab /etc/fstab.bak_$(date +%s)
 
 # ---------- Add to fstab ----------
 echo "${DISK}1 /tmp xfs defaults,nodev,nosuid,noexec 0 0" >> /etc/fstab
